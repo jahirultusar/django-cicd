@@ -1,2 +1,2 @@
 # django-cicd
-CI CD Pipline practice server
+CI CD Pipeline practice server
