@@ -28,5 +28,5 @@ jobs:
 
     - name: Run tests
       run: |
-        PYTHONPATH=$PYTHONPATH:$(pwd) python manage.py test
+        python manage.py test
       working-directory: cicd_practice
