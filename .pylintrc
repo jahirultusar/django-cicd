@@ -1,0 +1,17 @@
+[MASTER]
+load-plugins=pylint_django
+
+[REPORTS]
+files-output = no
+
+[MESSAGES CONTROL]
+disable=C0114, C0115, C0116  # Disable missing module/class/function docstring warnings
+
+[FORMAT]
+max-line-length=88
+
+[TYPECHECK]
+django-settings-module=cicd_practice.settings
+
+[MASTER]
+ignore-patterns=^.*__init__.py$
