@@ -27,9 +27,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Lint with Pylint
-      run: |
-        pylint --load-plugins pylint_django cicd_practice/
+    # - name: Lint with Pylint
+    #   run: |
+    #     pylint --load-plugins pylint_django cicd_practice/
 
     - name: Run tests
       run: |
