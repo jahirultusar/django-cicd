@@ -33,4 +33,5 @@ jobs:
 
     - name: Run tests
       run: |
-        python manage.py test
+        python cicd_practice/manage.py test
+
