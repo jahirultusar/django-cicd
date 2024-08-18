@@ -29,11 +29,10 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           python manage.py migrate
-          python manage.py collectstatic --noinput
-          echo "$SUDO_PASSWORD" | sudo -S systemctl restart gunicorn
-          echo "$SUDO_PASSWORD" | sudo -S systemctl restart nginx
+        #   python manage.py collectstatic --noinput
+          sudo systemctl restart gunicorn
+          sudo systemctl restart nginx
         EOF
       env:
         VPS_HOST: ${{ secrets.VPS_HOST }}
         VPS_USER: ${{ secrets.VPS_USER }}
-        SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
