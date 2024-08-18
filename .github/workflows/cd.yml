@@ -13,13 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Deploy to VPS
+    - name: Set up SSH
+      run: |
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
       env:
         SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
-        VPS_HOST: ${{ secrets.VPS_HOST }}
-        VPS_USER: ${{ secrets.VPS_USER }}
+
+    - name: Deploy to VPS
       run: |
-        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $VPS_USER@$VPS_HOST << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 $VPS_USER@$VPS_HOST << 'EOF'
           cd /home/tusar/django-cicd-practice
           git pull origin main
           source venv/bin/activate
@@ -29,3 +32,6 @@ jobs:
           sudo systemctl restart gunicorn
           sudo systemctl restart nginx
         EOF
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_USER: ${{ secrets.VPS_USER }}
