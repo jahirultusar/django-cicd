@@ -37,30 +37,4 @@ jobs:
       env:
         VPS_HOST: ${{ secrets.VPS_HOST }}
         VPS_USER: ${{ secrets.VPS_USER }}
-
-
-    - name: Get current version tag
-      id: version
-      run: |
-        git fetch --tags
-        if git describe --tags --abbrev=0; then
-          echo "Found latest tag."
-        else
-          echo "No tags found, starting at v0.0.0."
-          echo "v0.0.0" > version.txt
-        fi
-        CURRENT_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")
-        echo "Current tag: $CURRENT_TAG"
-        # Increment the version
-        IFS='.' read -r -a VERSION_PARTS <<< "${CURRENT_TAG//v/}"
-        PATCH=$((VERSION_PARTS[2] + 1))
-        NEW_TAG="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"
-        echo "New tag: $NEW_TAG"
-        echo "::set-output name=new_tag::$NEW_TAG"
-
-    - name: Create and push new tag
-      run: |
-        git tag ${{ steps.version.outputs.new_tag }}
-        git push origin ${{ steps.version.outputs.new_tag }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
