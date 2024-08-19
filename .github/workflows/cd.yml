@@ -25,7 +25,8 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 $VPS_USER@$VPS_HOST << 'EOF'
           cd /home/tusar/django-cicd-practice
-          git pull origin main --rebase
+          git reset --hard HEAD # Discard any local changes
+          git pull origin main --force  # Force pull the latest changes
           source venv/bin/activate
           pip install -r requirements.txt
           python manage.py migrate
