@@ -31,8 +31,8 @@ jobs:
           pip install -r requirements.txt
           python manage.py migrate
         #   python manage.py collectstatic --noinput
-          sudo -A systemctl restart supervisor
-          sudo -A systemctl restart nginx
+          sudo systemctl restart supervisor
+          sudo systemctl restart nginx
         EOF
       env:
         VPS_HOST: ${{ secrets.VPS_HOST }}
