@@ -6,9 +6,15 @@
     <title>Sample Index Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* This style will ensure the .full-height class has a minimum height of 100vh minus footer height */
+        .full-height {
+            min-height: calc(100vh - 60px); /* Adjust 60px to the height of your footer if different */
+        }
+    </style>
 </head>
 <body>
-    <div class="container d-flex justify-content-center align-items-center ">
+    <div class="container d-flex justify-content-center align-items-center full-height">
         <h1 class="display-1">This is a TEST 5</h1>
     </div>
 
