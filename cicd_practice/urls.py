@@ -22,5 +22,4 @@ from myapp import views, version_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('version/', version_view, name='version'),
 ]

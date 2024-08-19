@@ -38,7 +38,3 @@ jobs:
         VPS_HOST: ${{ secrets.VPS_HOST }}
         VPS_USER: ${{ secrets.VPS_USER }}
     
-    - name: Create Git Tag
-      run: |
-          git tag v$(date +'%Y%m%d%H%M%S')-deploy
-          git push origin --tags
