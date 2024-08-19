@@ -16,6 +16,7 @@
 <body>
     <div class="container d-flex justify-content-center align-items-center full-height">
         <h1 class="display-1">This is a TEST 6</h1>
+        <div id="version-display"></div>
     </div>
 
     <!-- Footer -->
@@ -30,10 +31,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         fetch('/version/')
-        .then(response => response.text())
-        .then(version => {
-            document.getElementById('version-display').textContent = `Version: ${version}`;
-        });
+            .then(response => response.text())
+            .then(version => {
+                document.getElementById('version-display').textContent = `Version: ${version}`;
+            });
     </script>
 
 </body>
