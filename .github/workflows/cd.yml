@@ -24,14 +24,15 @@ jobs:
     - name: Deploy to VPS
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 $VPS_USER@$VPS_HOST << 'EOF'
+          export SUDO_ASKPASS=/usr/bin/ssh-askpass  # Set askpass for sudo
           cd /home/tusar/django-cicd-practice
           git pull origin main --force  # Force pull the latest changes
           source venv/bin/activate
           pip install -r requirements.txt
           python manage.py migrate
         #   python manage.py collectstatic --noinput
-          sudo systemctl restart supervisor
-          sudo systemctl restart nginx
+          sudo -A systemctl restart supervisor
+          sudo -A systemctl restart nginx
         EOF
       env:
         VPS_HOST: ${{ secrets.VPS_HOST }}
