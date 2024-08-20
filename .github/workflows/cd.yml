@@ -20,6 +20,15 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
       env:
         SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+    
+    - name: Create version.txt with commit details
+      run: |
+        COMMIT_HASH=$(git rev-parse HEAD)
+        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        COMMIT_TAG=$(git describe --tags --exact-match 2>/dev/null || echo "No tag")
+        echo "Commit Hash: $COMMIT_HASH" > version.txt
+        echo "Commit Message: $COMMIT_MESSAGE" >> version.txt
+        echo "Commit Tag: $COMMIT_TAG" >> version.txt
 
     - name: Deploy to VPS
       run: |
