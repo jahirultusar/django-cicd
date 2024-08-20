@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-import os
+import subprocess
+
 
 
 def index(request):
@@ -8,11 +9,18 @@ def index(request):
 
 
 
+
 def version_view(request):
-    version_file_path = os.path.join(os.path.dirname(__file__), '../version.txt')
     try:
-        with open(version_file_path, 'r') as f:
-            version_info = f.read()
-    except FileNotFoundError:
+        # Capture the latest commit hash
+        commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip().decode('utf-8')
+
+        # Capture the latest commit message
+        commit_message = subprocess.check_output(["git", "log", "-1", "--pretty=%B"]).strip().decode('utf-8')
+
+        # Combine them into a version string
+        version_info = f"Commit Hash: {commit_hash}\nCommit Message: {commit_message}"
+    except subprocess.CalledProcessError:
         version_info = "Version information not available."
+
     return HttpResponse(version_info, content_type="text/plain")
