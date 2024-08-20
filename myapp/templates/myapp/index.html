@@ -7,7 +7,6 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* This style will ensure the .full-height class has a minimum height of 100vh minus footer height */
         .full-height {
             min-height: calc(100vh - 60px); /* Adjust 60px to the height of your footer if different */
         }
@@ -15,11 +14,12 @@
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center full-height">
-        <h1 class="display-1">This is a TEST 7</h1>
+        <div> <!-- This is the new div wrapper for vertical alignment -->
+            <h1 class="display-1">TEST Version: {{ git_version }}</h1>
+            <p class="lead">CI/CD Message: {{ git_message }}</p>
+        </div>
     </div>
-    <div id="version-display">version</div>
-
-
+    
     <!-- Footer -->
     <footer class="bg-light text-center text-lg-start mt-4 fixed-bottom">
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
@@ -30,17 +30,6 @@
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        fetch('/version/')
-            .then(response => response.text())
-            .then(versionInfo => {
-                document.getElementById('version-display').textContent = versionInfo;
-            });
-
-    </script>
 
 </body>
 </html>
-
-<!-- staging test -->

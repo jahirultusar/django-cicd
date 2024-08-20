@@ -4,23 +4,21 @@ import subprocess
 
 
 
+# def index(request):
+#     return render(request, 'myapp/index.html')
+
 def index(request):
-    return render(request, 'myapp/index.html')
+    git_hash, git_message = get_git_info()
+    context = {
+        'git_version': git_hash,
+        'git_message': git_message
+    }
+    return render(request, 'myapp/index.html', context)
 
-
-
-
-def version_view(request):
+def get_git_info():
     try:
-        # Capture the latest commit hash
-        commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip().decode('utf-8')
-
-        # Capture the latest commit message
-        commit_message = subprocess.check_output(["git", "log", "-1", "--pretty=%B"]).strip().decode('utf-8')
-
-        # Combine them into a version string
-        version_info = f"Commit Hash: {commit_hash}\nCommit Message: {commit_message}"
+        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip()[:6]
+        commit_message = subprocess.check_output(['git', 'log', '-1', '--pretty=%B']).decode('ascii').strip()
+        return commit_hash, commit_message
     except subprocess.CalledProcessError:
-        version_info = "Version information not available."
-
-    return HttpResponse(version_info, content_type="text/plain")
+        return "unknown", "No commit message available"
