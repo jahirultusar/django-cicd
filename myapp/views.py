@@ -28,8 +28,8 @@ def index(request):
 def get_git_info():
     try:
         commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip()[:6]
-        # Fetching commit message and date together
-        log_output = subprocess.check_output(['git', 'log', '-1', '--pretty=%B%n%ad'], '--date=local').decode('ascii').strip()
+        # Fetching commit message and date with corrected command format
+        log_output = subprocess.check_output(['git', 'log', '-1', '--pretty=%B%n%ad', '--date=local']).decode('ascii').strip()
         commit_message, commit_date = log_output.split('\n', 1)  # Splits the output into message and date
         return commit_hash, commit_message, commit_date
     except subprocess.CalledProcessError:
