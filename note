@@ -1,0 +1,14 @@
+server {
+        listen 80;
+        server_name cloud/our_ip_iddress;
+        
+        location /static {
+            alias /project_path/static_folder_directory; --> we can also use root instead of alias but in some specific cases. also writing with forward slash / after is recommended in some cases. like /static/
+        }
+        
+        location / {                          --> this will handover http requests to gunicorn
+            proxy_pass http://localhost:8000; 
+            include /etc/nginx/proxy_params;
+            proxy_redirect off;
+        }
+}

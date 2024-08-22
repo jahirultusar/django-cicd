@@ -1,4 +1,8 @@
-name: Django CD Pipeline
+
+
+
+name: CD Pipeline
+
 
 on:
   push:
@@ -12,6 +16,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
 
     - name: Deploy to VPS
       env:
@@ -29,3 +34,29 @@ jobs:
           sudo systemctl restart gunicorn
           sudo systemctl restart nginx
         EOF
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+
+    - name: Deploy to VPS
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 $VPS_USER@$VPS_HOST << 'EOF'
+          export SUDO_ASKPASS=/usr/bin/ssh-askpass  # Set askpass for sudo
+          cd /home/tusar/django-cicd-practice
+          git pull origin main --force  # Force pull the latest changes
+          source venv/bin/activate
+          pip install -r requirements.txt
+          python manage.py migrate
+        #   python manage.py collectstatic --noinput
+          sudo systemctl restart supervisor
+          sudo systemctl restart nginx
+        EOF
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+    

@@ -3,4 +3,8 @@
 # django-cicd
 CI CD Pipeline practice server
 
-tree 
+
+
+
+tree -I 'venv|__pycache__'
+

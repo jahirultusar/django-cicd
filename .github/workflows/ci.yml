@@ -1,9 +1,8 @@
-name: Django CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
     branches:
-      - main
       - staging
   pull_request:
     branches:
