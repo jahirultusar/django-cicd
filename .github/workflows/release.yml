@@ -32,9 +32,10 @@ jobs:
           git config --local user.name "GitHub Action"
           git add CHANGELOG.md
           git commit -m "Update CHANGELOG.md"
-          git push
+          # Include the token in the push command
+          git -c http.extraHeader="AUTHORIZATION: bearer ${{ secrets.GITHUB_TOKEN }}" push
         fi
-
+    
     - name: Bump version and push tag
       id: tagger
       uses: anothrNick/github-tag-action@1.38.0
