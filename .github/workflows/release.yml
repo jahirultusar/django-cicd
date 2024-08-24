@@ -1,0 +1,55 @@
+name: Automated Release Process
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Necessary to fetch all tags and history for correct versioning and changelog generation
+
+    - name: Set up Ruby for Changelog Generator
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'  # Ensure compatibility with github_changelog_generator
+
+    - name: Install Changelog Generator
+      run: gem install github_changelog_generator
+
+    - name: Generate Changelog
+      run: github_changelog_generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} --token ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create or Update Changelog File
+      run: |
+        if [ -f "CHANGELOG.md" ]; then
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "Update CHANGELOG.md"
+          git push
+        fi
+
+    - name: Bump version and push tag
+      id: tagger
+      uses: anothrNick/github-tag-action@1.38.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        default_bump: patch
+        with_v: true
+        release_branches: main
+
+    - name: Create GitHub Release
+      if: steps.tagger.outputs.new_tag != ''
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.tagger.outputs.new_tag }}
+        name: Release ${{ steps.tagger.outputs.new_tag }}
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
