@@ -9,10 +9,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
     - name: Checkout code
       uses: actions/checkout@v3
       with:
         fetch-depth: 0  # Necessary to fetch all tags and history for correct versioning and changelog generation
+        ssh-key: ${{ secrets.VPS_SSH_KEY }}
 
     - name: Set up Ruby for Changelog Generator
       uses: ruby/setup-ruby@v1
@@ -25,11 +31,6 @@ jobs:
     - name: Generate Changelog
       run: github_changelog_generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} --token ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-    
     - name: Create or Update Changelog File
       run: |
         if [ -f "CHANGELOG.md" ]; then
@@ -37,9 +38,9 @@ jobs:
           git config --local user.name "GitHub Action"
           git add CHANGELOG.md
           git commit -m "Update CHANGELOG.md"
-          git push origin HEAD:main
+          git push origin HEAD:main  # Ensure you're pushing to the correct branch
         fi
-    
+
     - name: Bump version and push tag
       id: tagger
       uses: anothrNick/github-tag-action@1.38.0
