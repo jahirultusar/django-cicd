@@ -25,6 +25,11 @@ jobs:
     - name: Generate Changelog
       run: github_changelog_generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} --token ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+    
     - name: Create or Update Changelog File
       run: |
         if [ -f "CHANGELOG.md" ]; then
@@ -32,8 +37,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add CHANGELOG.md
           git commit -m "Update CHANGELOG.md"
-          # Include the token in the push command
-          git -c http.extraHeader="AUTHORIZATION: bearer ${{ secrets.GITHUB_TOKEN }}" push
+          git push origin HEAD:main
         fi
     
     - name: Bump version and push tag
