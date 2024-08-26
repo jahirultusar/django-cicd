@@ -5,5 +5,9 @@
 # django-cicd
 CI CD Pipeline test server
 
+## Check out my blog!
+
+For details, insights and updates, visit my blog at [Django CI/CD pipline guide](https://test-server.jahirultusar.com/).
+
 
 tree -I 'venv|__pycache__'
