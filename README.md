@@ -7,7 +7,9 @@ CI CD Pipeline test server
 
 ## Check out my blog!
 
-For details, insights and updates, visit my blog at [Django CI/CD pipline guide](https://test-server.jahirultusar.com/).
+For details, insights and updates, visit my blog at [Django CI/CD pipline guide](https:blog.jahirultusar.com/)
+
+For live test server check out here at [test-server](https://test-server.jahirultusar.com/)
 
 
 tree -I 'venv|__pycache__'
